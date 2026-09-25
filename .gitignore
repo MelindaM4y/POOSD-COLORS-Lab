@@ -9,7 +9,17 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.env
+.env
+.env.*
+*.DS_Store
+*.pem
+*.key
+*.crt
+*.pfx
+config.local.php
+config/*.local.php
+secrets/
+credentials.php
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
