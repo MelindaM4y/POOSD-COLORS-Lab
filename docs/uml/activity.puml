@@ -1,0 +1,45 @@
+@startuml
+!pragma layout smetana
+title COLORS Login and Color Management
+
+start
+:Enter username and password;
+:POST credentials to Login.php;
+:Look up matching user in Users;
+
+if (Credentials match?) then (yes)
+  :Return user ID and name;
+  :Save user details in browser cookie;
+  :Redirect to color.html;
+  :Read cookie;
+  if (Cookie contains user ID?) then (yes)
+    :Display color management page;
+    repeat
+      if (Selected action?) then (search)
+        :Enter search text;
+        :POST search and user ID to SearchColors.php;
+        :Find matching Colors for user ID;
+        if (Matches found?) then (yes)
+          :Display matching colors;
+        else (no)
+          :Display "No Records Found";
+        endif
+      else (add)
+        :Enter color;
+        :POST color and user ID to AddColor.php;
+        :Insert color into Colors;
+        :Display add confirmation;
+      endif
+    repeat while (Continue managing colors?) is (yes)
+    -> no;
+    :Clear browser cookie;
+    :Redirect to index.html;
+  else (no)
+    :Redirect to index.html;
+  endif
+else (no)
+  :Display login error;
+endif
+
+stop
+@enduml
