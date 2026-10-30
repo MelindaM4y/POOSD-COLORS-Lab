@@ -18,11 +18,14 @@ if (Credentials match?) then (yes)
       if (Selected action?) then (search)
         :Enter search text;
         :POST search and user ID to SearchColors.php;
-        :Find matching Colors for user ID;
+        :Find Colors whose Name matches\nand UserID matches;
+        :Return JSON response;
+        :Set "Color(s) has been retrieved" status;
         if (Matches found?) then (yes)
           :Display matching colors;
         else (no)
-          :Display "No Records Found";
+          :API returns "No Records Found"\nwithout a results array;
+          :Client expects results and fails\nto render the error response;
         endif
       else (add)
         :Enter color;
