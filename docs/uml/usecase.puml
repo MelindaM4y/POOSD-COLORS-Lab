@@ -1,32 +1,18 @@
 @startuml
-!pragma layout smetana
 left to right direction
-skinparam packageStyle rectangle
 
 actor User
 
 rectangle "COLORS Web Application" {
   usecase "Log in" as Login
-  usecase "Open color page" as OpenColors
-  usecase "Search own colors\nby partial name" as SearchColors
-  usecase "Add color to own list" as AddColor
+  usecase "Search colors" as SearchColors
+  usecase "Add color" as AddColor
   usecase "Log out" as Logout
 }
 
 User --> Login
-User --> OpenColors
 User --> SearchColors
 User --> AddColor
 User --> Logout
 
-note bottom of OpenColors
-The browser uses a cookie to decide whether
-to display the color page. The PHP color
-endpoints do not validate a server session.
-end note
-
-note bottom of AddColor
-The API identifies the user's list using
-the userId sent by the browser.
-end note
 @enduml

@@ -1,87 +1,34 @@
 @startuml
-!pragma layout smetana
-title COLORS Application Class Diagram
-skinparam classAttributeIconSize 0
-
-package "Browser" {
-  class LoginPage <<boundary>>
-  class ColorsPage <<boundary>>
-
-  class ColorAppClient <<control>> {
-    +doLogin()
-    +saveCookie()
-    +readCookie()
-    +doLogout()
-    +searchColor()
-    +addColor()
-  }
-
-  class UserCookie <<client state>> {
-    +userId
-    +firstName
-    +lastName
-    +expiresIn: 20 minutes
-  }
+class User {
+  ID
+  FirstName
+  LastName
+  Login
+  Password
 }
 
-package "PHP API" {
-  class DatabaseConfig <<configuration>> {
-    +loadDatabaseConfig(): ?array
-  }
-
-  class LoginEndpoint <<controller>> {
-    +authenticate(login, password)
-  }
-  class SearchColorsEndpoint <<controller>> {
-    +search(search, userId)
-  }
-  class AddColorEndpoint <<controller>> {
-    +add(color, userId)
-  }
+class Color {
+  ID
+  Name
+  UserID
 }
 
-package "MySQL" {
-  class Users <<entity>> {
-    +ID: INT
-    +FirstName: VARCHAR(50)
-    +LastName: VARCHAR(50)
-    +Login: VARCHAR(50)
-    +Password: VARCHAR(50)
-  }
-
-  class Colors <<entity>> {
-    +ID: INT
-    +Name: VARCHAR(50)
-    +UserID: INT
-  }
+class WebClient {
+  Login
+  SearchColors
+  AddColor
+  Logout
 }
 
-class ".env file" as EnvFile <<configuration file>>
+class LoginAPI
+class SearchColorsAPI
+class AddColorAPI
 
-LoginPage --> ColorAppClient
-ColorsPage --> ColorAppClient
-ColorAppClient --> UserCookie : reads/writes
-ColorAppClient ..> LoginEndpoint : login request
-ColorAppClient ..> SearchColorsEndpoint : search request
-ColorAppClient ..> AddColorEndpoint : add request
-LoginEndpoint ..> Users : looks up credentials
-SearchColorsEndpoint ..> Colors : searches by name and UserID
-AddColorEndpoint ..> Colors : inserts color
-LoginEndpoint ..> DatabaseConfig : loads DB settings
-SearchColorsEndpoint ..> DatabaseConfig : loads DB settings
-AddColorEndpoint ..> DatabaseConfig : loads DB settings
-DatabaseConfig ..> EnvFile : reads
-Users "1" <-- "0..*" Colors : UserID matches ID
-
-note bottom of ColorAppClient
-The user ID is supplied by the browser for color API requests.
-The PHP endpoints do not establish or validate a server session.
-end note
-
-note bottom of Colors
-UserID associates each color with a user.
-The handout schema does not declare a foreign-key constraint.
-The handout also defines Contacts, but this app has no endpoint
-that uses it, so it is outside this diagram's scope.
-end note
+WebClient --> LoginAPI
+WebClient --> SearchColorsAPI
+WebClient --> AddColorAPI
+LoginAPI --> User
+SearchColorsAPI --> Color
+AddColorAPI --> Color
+User "1" -- "0..*" Color
 @enduml
