@@ -5,10 +5,10 @@
 	$searchResults = "";
 	$searchCount = 0;
 
-	$dbHost = getenv("DB_HOST") ?: $_ENV["DB_HOST"] ?? "localhost";
+	$dbHost = getenv("DB_HOST") ?: $_ENV["DB_HOST"] ?? "";
 	$dbUser = getenv("DB_USER") ?: $_ENV["DB_USER"] ?? "";
 	$dbPass = getenv("DB_PASS") ?: $_ENV["DB_PASS"] ?? "";
-	$dbName = getenv("DB_NAME") ?: $_ENV["DB_NAME"] ?? "COP4331";
+	$dbName = getenv("DB_NAME") ?: $_ENV["DB_NAME"] ?? "";
 
 	if ($dbUser === "" || $dbPass === "")
 	{
