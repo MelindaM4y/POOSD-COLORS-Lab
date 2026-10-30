@@ -25,6 +25,10 @@ package "Browser" {
 }
 
 package "PHP API" {
+  class DatabaseConfig <<configuration>> {
+    +loadDatabaseConfig(): ?array
+  }
+
   class LoginEndpoint <<controller>> {
     +authenticate(login, password)
   }
@@ -37,20 +41,22 @@ package "PHP API" {
 }
 
 package "MySQL" {
-  class User <<entity>> {
-    +ID
-    +Login
-    +Password
-    +firstName
-    +lastName
+  class Users <<entity>> {
+    +ID: INT
+    +FirstName: VARCHAR(50)
+    +LastName: VARCHAR(50)
+    +Login: VARCHAR(50)
+    +Password: VARCHAR(50)
   }
 
-  class Color <<entity>> {
-    +ID
-    +UserID
-    +Name
+  class Colors <<entity>> {
+    +ID: INT
+    +Name: VARCHAR(50)
+    +UserID: INT
   }
 }
+
+class ".env file" as EnvFile <<configuration file>>
 
 LoginPage --> ColorAppClient
 ColorsPage --> ColorAppClient
@@ -58,19 +64,24 @@ ColorAppClient --> UserCookie : reads/writes
 ColorAppClient ..> LoginEndpoint : login request
 ColorAppClient ..> SearchColorsEndpoint : search request
 ColorAppClient ..> AddColorEndpoint : add request
-LoginEndpoint ..> User : looks up credentials
-SearchColorsEndpoint ..> Color : searches by name and UserID
-AddColorEndpoint ..> Color : inserts color
-User "1" <-- "0..*" Color : UserID association
+LoginEndpoint ..> Users : looks up credentials
+SearchColorsEndpoint ..> Colors : searches by name and UserID
+AddColorEndpoint ..> Colors : inserts color
+LoginEndpoint ..> DatabaseConfig : loads DB settings
+SearchColorsEndpoint ..> DatabaseConfig : loads DB settings
+AddColorEndpoint ..> DatabaseConfig : loads DB settings
+DatabaseConfig ..> EnvFile : reads
+Users "1" <-- "0..*" Colors : UserID matches ID
 
 note bottom of ColorAppClient
 The user ID is supplied by the browser for color API requests.
 The PHP endpoints do not establish or validate a server session.
 end note
 
-note bottom of User
-Entity attributes reflect fields used by the app.
-UserID associates colors with users; no database
-foreign-key constraint is assumed here.
+note bottom of Colors
+UserID associates each color with a user.
+The handout schema does not declare a foreign-key constraint.
+The handout also defines Contacts, but this app has no endpoint
+that uses it, so it is outside this diagram's scope.
 end note
 @enduml
