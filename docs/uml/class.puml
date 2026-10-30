@@ -1,76 +1,34 @@
 @startuml
-!pragma layout smetana
-title COLORS Application Class Diagram
-skinparam classAttributeIconSize 0
-
-package "Browser" {
-  class LoginPage <<boundary>>
-  class ColorsPage <<boundary>>
-
-  class ColorAppClient <<control>> {
-    +doLogin()
-    +saveCookie()
-    +readCookie()
-    +doLogout()
-    +searchColor()
-    +addColor()
-  }
-
-  class UserCookie <<client state>> {
-    +userId
-    +firstName
-    +lastName
-    +expiresIn: 20 minutes
-  }
+class User {
+  ID
+  FirstName
+  LastName
+  Login
+  Password
 }
 
-package "PHP API" {
-  class LoginEndpoint <<controller>> {
-    +authenticate(login, password)
-  }
-  class SearchColorsEndpoint <<controller>> {
-    +search(search, userId)
-  }
-  class AddColorEndpoint <<controller>> {
-    +add(color, userId)
-  }
+class Color {
+  ID
+  Name
+  UserID
 }
 
-package "MySQL" {
-  class User <<entity>> {
-    +ID
-    +Login
-    +Password
-    +firstName
-    +lastName
-  }
-
-  class Color <<entity>> {
-    +ID
-    +UserID
-    +Name
-  }
+class WebClient {
+  Login
+  SearchColors
+  AddColor
+  Logout
 }
 
-LoginPage --> ColorAppClient
-ColorsPage --> ColorAppClient
-ColorAppClient --> UserCookie : reads/writes
-ColorAppClient ..> LoginEndpoint : login request
-ColorAppClient ..> SearchColorsEndpoint : search request
-ColorAppClient ..> AddColorEndpoint : add request
-LoginEndpoint ..> User : looks up credentials
-SearchColorsEndpoint ..> Color : searches by name and UserID
-AddColorEndpoint ..> Color : inserts color
-User "1" <-- "0..*" Color : UserID association
+class LoginAPI
+class SearchColorsAPI
+class AddColorAPI
 
-note bottom of ColorAppClient
-The user ID is supplied by the browser for color API requests.
-The PHP endpoints do not establish or validate a server session.
-end note
-
-note bottom of User
-Entity attributes reflect fields used by the app.
-UserID associates colors with users; no database
-foreign-key constraint is assumed here.
-end note
+WebClient --> LoginAPI
+WebClient --> SearchColorsAPI
+WebClient --> AddColorAPI
+LoginAPI --> User
+SearchColorsAPI --> Color
+AddColorAPI --> Color
+User "1" -- "0..*" Color
 @enduml
