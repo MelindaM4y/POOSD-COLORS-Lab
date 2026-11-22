@@ -29,6 +29,14 @@ The COLORS application is a simple LAMP-stack web app that lets users log in and
 3. Log in on the main page.
 4. After login, use the color page to search for colors or add a new one to your list.
 
+## Linting and tests
+
+Node.js is used only for the test and lint tooling; the application itself remains a LAMP application and should be served by Apache with PHP.
+
+1. Install the development dependencies with `npm ci`.
+2. Run `npm run lint` to check the JavaScript and PHP files.
+3. Run `npm test` to execute the front-end unit test and PHP API integration test. The integration test requires PHP CLI.
+
 ## Assumptions and limitations
 
 - The app assumes a basic LAMP environment and a MySQL database is available.

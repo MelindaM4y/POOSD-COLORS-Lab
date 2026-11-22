@@ -1,3 +1,4 @@
+/* exported doLogin, readCookie, doLogout, addColor, searchColor */
 const pagePath = window.location.pathname.replace(/\/[^/]*$/, '');
 const urlBase = window.location.origin + pagePath + '/api';
 const extension = 'php';
@@ -111,10 +112,16 @@ function doLogout()
 
 function addColor()
 {
-	let newColor = document.getElementById("colorText").value;
+	let newColor = document.getElementById("colorText").value.trim();
 	document.getElementById("colorAddResult").innerHTML = "";
 
-	let tmp = {color:newColor,userId,userId};
+	if( !isColorNameValid( newColor ) )
+	{
+		document.getElementById("colorAddResult").innerHTML = "Please enter a color";
+		return;
+	}
+
+	let tmp = {color:newColor,userId};
 	let jsonPayload = JSON.stringify( tmp );
 
 	let url = urlBase + '/AddColor.' + extension;
