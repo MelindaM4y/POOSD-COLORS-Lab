@@ -12,11 +12,11 @@ function doLogin()
 	firstName = "";
 	lastName = "";
 	
-	let login = document.getElementById("login-name").value;
-	let password = document.getElementById("login-password").value;
+	let login = document.getElementById("loginName").value;
+	let password = document.getElementById("loginPassword").value;
 //	var hash = md5( password );
 	
-	document.getElementById("login-result").innerHTML = "";
+	document.getElementById("loginResult").innerHTML = "";
 
 	let tmp = {login:login,password:password};
 //	var tmp = {login:login,password:hash};
@@ -38,7 +38,7 @@ function doLogin()
 		
 				if( userId < 1 )
 				{		
-					document.getElementById("login-result").innerHTML = "User/Password combination incorrect";
+					document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
 					return;
 				}
 		
@@ -54,7 +54,7 @@ function doLogin()
 	}
 	catch(err)
 	{
-		document.getElementById("login-result").innerHTML = err.message;
+		document.getElementById("loginResult").innerHTML = err.message;
 	}
 
 }
@@ -111,16 +111,10 @@ function doLogout()
 
 function addColor()
 {
-	let newColor = document.getElementById("color-text").value;
-	document.getElementById("color-add-result").innerHTML = "";
+	let newColor = document.getElementById("colorText").value;
+	document.getElementById("colorAddResult").innerHTML = "";
 
-	if( !window.isValidColorName(newColor) )
-	{
-		document.getElementById("color-add-result").innerHTML = "Please enter a color";
-		return;
-	}
-
-	let tmp = {color:newColor,userId};
+	let tmp = {color:newColor,userId,userId};
 	let jsonPayload = JSON.stringify( tmp );
 
 	let url = urlBase + '/AddColor.' + extension;
@@ -134,22 +128,22 @@ function addColor()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("color-add-result").innerHTML = "Color has been added";
+				document.getElementById("colorAddResult").innerHTML = "Color has been added";
 			}
 		};
 		xhr.send(jsonPayload);
 	}
 	catch(err)
 	{
-		document.getElementById("color-add-result").innerHTML = err.message;
+		document.getElementById("colorAddResult").innerHTML = err.message;
 	}
 
 }
 
 function searchColor()
 {
-let srch = document.getElementById("search-text").value;
-	document.getElementById("color-search-result").innerHTML = "";
+let srch = document.getElementById("searchText").value;
+	document.getElementById("colorSearchResult").innerHTML = "";
 	
 	let colorList = "";
 
@@ -167,7 +161,7 @@ let srch = document.getElementById("search-text").value;
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("color-search-result").innerHTML = "Color(s) has been retrieved";
+				document.getElementById("colorSearchResult").innerHTML = "Color(s) has been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 				
 				for( let i=0; i<jsonObject.results.length; i++ )
@@ -186,6 +180,6 @@ let srch = document.getElementById("search-text").value;
 	}
 	catch(err)
 	{
-		document.getElementById("color-search-result").innerHTML = err.message;
+		document.getElementById("colorSearchResult").innerHTML = err.message;
 	}
 }
