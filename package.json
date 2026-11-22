@@ -10,7 +10,8 @@
   "lint:html": "htmlhint \"**/*.html\"",
   "lint:css": "stylelint \"**/*.css\"",
   "lint:js": "eslint \"**/*.js\"",
-  "lint": "npm run lint:html && npm run lint:css && npm run lint:js"
+  "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
+  "test": "node --test"
 },
   "repository": {
     "type": "git",

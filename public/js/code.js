@@ -114,6 +114,12 @@ function addColor()
 	let newColor = document.getElementById("color-text").value;
 	document.getElementById("color-add-result").innerHTML = "";
 
+	if( !window.isValidColorName(newColor) )
+	{
+		document.getElementById("color-add-result").innerHTML = "Please enter a color";
+		return;
+	}
+
 	let tmp = {color:newColor,userId};
 	let jsonPayload = JSON.stringify( tmp );
 

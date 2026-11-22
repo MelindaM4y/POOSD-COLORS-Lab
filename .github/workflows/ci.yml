@@ -1,9 +1,8 @@
-name: CI Linting Workflow
+name: CI Lint and Test Workflow
 
 on:
   push:
   pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -20,8 +19,16 @@ jobs:
         node-version: '20'
         cache: 'npm'
 
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+
     - name: Install dependencies
       run: npm ci
 
     - name: Run Linters
       run: npm run lint
+
+    - name: Run Tests
+      run: npm test
